@@ -35,6 +35,9 @@ class RENDER_PT_ui(bpy.types.Panel):
                      icon="SEQ_SEQUENCER")
         row.operator("sequencerextra.bz_audio_remove", icon="CANCEL")
         row = layout.row()
+        row.prop(scene, "bz_attack_time")
+        row.prop(scene, "bz_release_time")
+        row = layout.row()
         row.prop(scene, "bz_bar_count")
         row.prop(scene, "bz_bar_width")
         row = layout.row()
@@ -76,6 +79,22 @@ def initprop():
         description="Channel where audio will be added",
         default=1,
         min=1
+        )
+
+    bpy.types.Scene.bz_attack_time = bpy.props.FloatProperty(
+        name="Attack time",
+        description="How long it takes for the hull curve to rise (the lower the value the steeper it can rise)",
+        default=0.005,
+        min=0,
+        max=2
+        )
+
+    bpy.types.Scene.bz_release_time = bpy.props.FloatProperty(
+        name="Release time",
+        description="How long it takes for the hull curve to fall (the lower the value the steeper it can fall)",
+        default=0.2,
+        min=0,
+        max=5
         )
 
     bpy.types.Scene.bz_bar_count = bpy.props.IntProperty(

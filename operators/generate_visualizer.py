@@ -79,6 +79,8 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
     def execute(self, context):
         scene = context.scene
         scene.frame_current = 1
+        attack_time = scene.bz_attack_time
+        release_time = scene.bz_release_time
         bar_count = scene.bz_bar_count
         bar_width = scene.bz_bar_width
         amplitude = scene.bz_amplitude
@@ -152,7 +154,8 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
             area = bpy.context.area.type
             bpy.context.area.type = 'GRAPH_EDITOR'
 
-            bpy.ops.graph.sound_bake(filepath=audiofile, low=(l), high=(h))
+            bpy.ops.graph.sound_bake(filepath=audiofile, low=(l), high=(h), 
+                                        attack=attack_time, release=release_time)
             
             bpy.context.area.type = area
             
