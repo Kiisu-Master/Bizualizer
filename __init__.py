@@ -38,6 +38,8 @@ class RENDER_PT_ui(bpy.types.Panel):
         row.prop(scene, "bz_attack_time")
         row.prop(scene, "bz_release_time")
         row = layout.row()
+        row.prop(scene, "bz_bar_shape")
+        row = layout.row()
         row.prop(scene, "bz_bar_count")
         row.prop(scene, "bz_bar_width")
         row = layout.row()
@@ -97,6 +99,16 @@ def initprop():
         max=5
         )
 
+    bpy.types.Scene.bz_bar_shape = bpy.props.EnumProperty(
+        name="Bar Shape",
+        description="The shape of the bars",
+        default="RECTANGLE",
+        items=[ ("RECTANGLE", "Rectangle", "", "", 1),
+                ("TRIANGLE", "Triangle", "", "", 2),
+                ("CUBOID", "Cuboid", "", "", 3),
+                ("PYRAMID", "Pyramid", "", "", 4)
+        ])
+    
     bpy.types.Scene.bz_bar_count = bpy.props.IntProperty(
         name="Bar Count",
         description="The number of bars to make",

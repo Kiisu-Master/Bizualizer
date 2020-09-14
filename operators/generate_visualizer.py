@@ -76,11 +76,32 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
         else:
             return True
 
+    def getVertices(self, shape):
+        if shape == "RECTANGLE":
+            return [(-1, 2, 0), (1, 2, 0), (1, 0, 0), (-1, 0, 0)]
+        if shape == "TRIANGLE":
+            return [(0, 2, 0), (1, 0, 0), (-1, 0, 0)]
+        if shape == "CUBOID":
+            return [(-1, 2, -1), (1, 2, -1), (1, 0, -1), (-1, 0, -1), (-1, 2, 1), (1, 2, 1), (1, 0, 1), (-1, 0, 1)]
+        if shape == "PYRAMID":
+            return [(0, 2, 0), (-1, 0, -1), (1, 0, -1), (1, 0, 1), (-1, 0, 1)]
+
+    def getFaces(self, shape):
+        if shape == "RECTANGLE":
+            return [(0, 1, 2, 3)]
+        if shape == "TRIANGLE":
+            return [(0, 1, 2)]
+        if shape == "CUBOID":
+            return [(0, 1, 2, 3), (4, 5, 6, 7), (0, 1, 5, 4), (2, 3, 7, 6), (0, 3, 7, 4), (1, 2, 6, 5)]
+        if shape == "PYRAMID":
+            return [(0, 1, 2), (0, 2, 3), (0, 3, 4), (0, 4, 1), (1, 2, 3, 4)]
+
     def execute(self, context):
         scene = context.scene
         scene.frame_current = 1
         attack_time = scene.bz_attack_time
         release_time = scene.bz_release_time
+        bar_shape = scene.bz_bar_shape
         bar_count = scene.bz_bar_count
         bar_width = scene.bz_bar_width
         amplitude = scene.bz_amplitude
@@ -114,8 +135,8 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
             scene.collection.objects.link(bar)
             bar.select_set(True)
             bpy.context.view_layer.objects.active = bar
-            verts = [(-1, 2, 0), (1, 2, 0), (1, 0, 0), (-1, 0, 0)]
-            faces = [(3, 2, 1, 0)]
+            verts = self.getVertices(bar_shape)
+            faces = self.getFaces(bar_shape)
             mesh.from_pydata(verts, [], faces)
             mesh.update()
 
