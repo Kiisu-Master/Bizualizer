@@ -60,6 +60,8 @@ class RENDER_PT_ui(bpy.types.Panel):
         row = layout.row()
         row.operator("object.bz_generate", icon="FILE_REFRESH")
         row = layout.row()
+        row.prop(scene, "bz_cam_alignment")
+        row = layout.row()
         row.operator("object.bz_align_camera", icon="CAMERA_DATA")
 
         box = layout.box()
@@ -157,6 +159,19 @@ def initprop():
         default=2.25,
         min=0
         )
+
+    bpy.types.Scene.bz_cam_alignment = bpy.props.EnumProperty(
+        name="Alignment",
+        description="Position, orientation and type of camera",
+        default="2D_bottom",
+        items=[ ("2D_bottom", "2D bottom", "", "", 1),
+                ("2D_center", "2D center", "", "", 2),
+                ("2D_top", "2D top", "", "", 3),
+                ("2D_left", "2D left", "", "", 4),
+                ("2D_right", "2D right", "", "", 5),
+                ("3D_bottom", "3D bottom", "", "", 6),
+                ("3D_center", "3D center", "", "", 7)
+        ])        
 
     bpy.types.Scene.bbz_config = bpy.props.StringProperty(
         name="Config File",
