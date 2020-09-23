@@ -116,8 +116,7 @@ class RENDER_OT_align_camera(bpy.types.Operator):
 
     def getBarsTotalSize(self, scene):
         bar_count = scene.bz_bar_count
-        bar_width = scene.bz_bar_width
-        spacing = scene.bz_spacing + bar_width * 2
+        spacing = scene.bz_spacing + scene.bz_bar_width
         
         extra_cushion = scene.bz_spacing
         bars_total_size = (bar_count * spacing) + extra_cushion

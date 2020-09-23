@@ -32,6 +32,9 @@ class RENDER_PT_ui(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         scene = bpy.context.scene
+
+        row = layout.label(text="Audio")
+
         row = layout.row()
         row.prop(scene, "bz_audiofile", icon="SOUND")
         row = layout.row()
@@ -40,9 +43,10 @@ class RENDER_PT_ui(bpy.types.Panel):
         row.operator("sequencerextra.bz_audio_to_sequencer",
                      icon="SEQ_SEQUENCER")
         row.operator("sequencerextra.bz_audio_remove", icon="CANCEL")
-        row = layout.row()
-        row.prop(scene, "bz_attack_time")
-        row.prop(scene, "bz_release_time")
+
+        row = layout.separator()
+        row = layout.label(text="Bars")
+
         row = layout.row()
         row.prop(scene, "bz_bar_shape")
         row = layout.row()
@@ -71,7 +75,17 @@ class RENDER_PT_ui(bpy.types.Panel):
         row = layout.row()
         row.prop(scene, "bz_color")
         row = layout.row()
+        row.prop(scene, "bz_attack_time")
+        row.prop(scene, "bz_release_time")
+
+        row = layout.separator()
+
+        row = layout.row()
         row.operator("object.bz_generate", icon="FILE_REFRESH")
+
+        row = layout.separator()
+        row = layout.label(text="Camera")
+
         row = layout.row()
         row.prop(scene, "bz_cam_alignment")
         row = layout.row()
@@ -134,21 +148,21 @@ def initprop():
     bpy.types.Scene.bz_bar_width = bpy.props.FloatProperty(
         name="Bar Width",
         description="The width of the bars",
-        default=0.8,
+        default=1.6,
         min=0
         )
 
     bpy.types.Scene.bz_bar_depth = bpy.props.FloatProperty(
         name="Bar Depth",
         description="The depth of the bars (3D only)",
-        default=0.8,
+        default=1.6,
         min=0
         )
 
     bpy.types.Scene.bz_amplitude = bpy.props.FloatProperty(
         name="Amplitude",
         description="Amplitude of visualizer bars",
-        default=24.0,
+        default=48.0,
         min=0
         )
 
@@ -158,7 +172,9 @@ def initprop():
         description="Color applied to bars after visualizer is generated",
         size=3,
         default=(1.0, 1.0, 1.0),
-        min=0.0, max=1.0,)
+        min=0.0,
+        max=1.0
+        )
 
     bpy.types.Scene.bz_use_radial = bpy.props.BoolProperty(
         name="Use Radial",

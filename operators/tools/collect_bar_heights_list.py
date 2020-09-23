@@ -6,7 +6,7 @@ def collect_bar_heights_list(song_path, bar_count, scene):
 
     scene.bz_audiofile = song_path
     scene.bz_bar_count = bar_count
-    scene.bz_amplitude = 10
+    scene.bz_amplitude = 20
 
     bpy.ops.object.bz_generate()
 

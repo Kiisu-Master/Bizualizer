@@ -68,6 +68,8 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
     bl_label = "(re)Generate Visualizer"
     bl_description = "Generates visualizer bars and animation"
 
+    base_size = 2
+
     @classmethod
     def poll(self, context):
         scene = context.scene
@@ -103,10 +105,10 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
         release_time = scene.bz_release_time
         bar_shape = scene.bz_bar_shape
         bar_count = scene.bz_bar_count
-        bar_width = scene.bz_bar_width
-        bar_depth = scene.bz_bar_depth
-        amplitude = scene.bz_amplitude
-        spacing = scene.bz_spacing + bar_width * 2
+        bar_width = scene.bz_bar_width / self.base_size
+        bar_depth = scene.bz_bar_depth / self.base_size
+        amplitude = scene.bz_amplitude / self.base_size
+        spacing = scene.bz_spacing + scene.bz_bar_width
         radius = scene.bz_radius
         audiofile = bpy.path.abspath(scene.bz_audiofile)
         digits = str(len(str(bar_count)))
