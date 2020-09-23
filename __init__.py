@@ -99,7 +99,7 @@ def initprop():
         )
 
     bpy.types.Scene.bz_attack_time = bpy.props.FloatProperty(
-        name="Attack time",
+        name="Attack Time",
         description="How long it takes for the hull curve to rise (the lower the value the steeper it can rise)",
         default=0.005,
         min=0,
@@ -107,7 +107,7 @@ def initprop():
         )
 
     bpy.types.Scene.bz_release_time = bpy.props.FloatProperty(
-        name="Release time",
+        name="Release Time",
         description="How long it takes for the hull curve to fall (the lower the value the steeper it can fall)",
         default=0.2,
         min=0,
