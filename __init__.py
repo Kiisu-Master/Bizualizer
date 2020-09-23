@@ -22,6 +22,12 @@ class RENDER_PT_ui(bpy.types.Panel):
     bl_label = "Bizualizer"
     bl_context = "scene"
     bl_options = {"DEFAULT_CLOSED"}
+    
+    def is_shape_3d(self, shape):    
+        if shape == "CUBOID" or shape == "PYRAMID":
+            return True
+        else:
+            return False
 
     def draw(self, context):
         layout = self.layout
@@ -41,22 +47,29 @@ class RENDER_PT_ui(bpy.types.Panel):
         row.prop(scene, "bz_bar_shape")
         row = layout.row()
         row.prop(scene, "bz_bar_count")
-        row.prop(scene, "bz_bar_width")
         row = layout.row()
-        row.prop(scene, "bz_amplitude")
-        row.prop(scene, "bz_spacing")
+        split = row.split()
+        col_a = split.column(align=True)
+        col_a.prop(scene, "bz_bar_width")
+        col_b = split.column(align=True)
+        col_b.prop(scene, "bz_bar_depth")
+        col_b.enabled = self.is_shape_3d(scene.bz_bar_shape)
         row = layout.row()
-        row.prop(scene, "bz_color")
+        split = row.split()
+        col_a = split.column(align=True)
+        col_a.prop(scene, "bz_amplitude")
+        col_b = split.column(align=True)
+        col_b.prop(scene, "bz_spacing")
+        col_b.enabled = not scene.bz_use_radial
         row = layout.row()
         split = row.split()
         col_a = split.column(align=True)
         col_a.prop(scene, "bz_use_radial")
         col_b = split.column(align=True)
         col_b.prop(scene, "bz_radius")
-        if scene.bz_use_radial:
-            col_b.enabled = True
-        else:
-            col_b.enabled = False
+        col_b.enabled = scene.bz_use_radial
+        row = layout.row()
+        row.prop(scene, "bz_color")
         row = layout.row()
         row.operator("object.bz_generate", icon="FILE_REFRESH")
         row = layout.row()
@@ -125,6 +138,13 @@ def initprop():
         min=0
         )
 
+    bpy.types.Scene.bz_bar_depth = bpy.props.FloatProperty(
+        name="Bar Depth",
+        description="The depth of the bars (3D only)",
+        default=0.8,
+        min=0
+        )
+
     bpy.types.Scene.bz_amplitude = bpy.props.FloatProperty(
         name="Amplitude",
         description="Amplitude of visualizer bars",
@@ -156,7 +176,7 @@ def initprop():
     bpy.types.Scene.bz_spacing = bpy.props.FloatProperty(
         name="Spacing",
         description="Spacing between bars",
-        default=2.25,
+        default=0.65,
         min=0
         )
 
