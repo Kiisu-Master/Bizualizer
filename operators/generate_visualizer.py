@@ -4,7 +4,7 @@ import math
 from .tools.update_progress import update_progress
 
 
-def make_color(name, rgb):
+def make_color(name, rgb, emission_strength):
     if name in bpy.data.materials:
         material = bpy.data.materials[name]
     else:
@@ -20,6 +20,7 @@ def make_color(name, rgb):
         
     node_emission = nodes.new(type='ShaderNodeEmission')
     node_emission.inputs[0].default_value = (rgb[0], rgb[1], rgb[2], 1)
+    node_emission.inputs[1].default_value = emission_strength
     node_emission.location = [0, -50]
     
     node_mix = nodes.new(type='ShaderNodeMixShader')
@@ -112,6 +113,17 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
         radius = scene.bz_radius
         audiofile = bpy.path.abspath(scene.bz_audiofile)
         digits = str(len(str(bar_count)))
+        number_format = "%0" + digits + "d"
+        line_start = -(bar_count * spacing) / 2 + spacing / 2
+
+        vertices = self.getVertices(bar_shape)
+        faces = self.getFaces(bar_shape)
+
+        red = scene.bz_color[0]
+        green = scene.bz_color[1]
+        blue = scene.bz_color[2]
+        emission_strength = scene.bz_emission_strength
+        material = make_color('bz_color', [red, green, blue], emission_strength)
 
         noteStep = 120.0/bar_count
         a = 2**(1.0/12.0)
@@ -132,15 +144,13 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
         wm.progress_begin(0, 100.0)
 
         for i in range(0, bar_count):
-            name = "bz_bar" + (("%0" + digits + "d") % i)
+            name = "bz_bar" + (number_format % i)
             mesh = bpy.data.meshes.new(name)
             bar = bpy.data.objects.new(name, mesh)
             scene.collection.objects.link(bar)
             bar.select_set(True)
             bpy.context.view_layer.objects.active = bar
-            verts = self.getVertices(bar_shape)
-            faces = self.getFaces(bar_shape)
-            mesh.from_pydata(verts, [], faces)
+            mesh.from_pydata(vertices, [], faces)
             mesh.update()
 
             loc = [0.0, 0.0, 0.0]
@@ -152,10 +162,7 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
                 loc[1] = math.cos(angle) * radius
 
             else:
-                loc[0] = (i * spacing) - ((bar_count * spacing) / 2)
-
-                if bar_count % 2 == 0:
-                    loc[0] += spacing / 2
+                loc[0] = (i * spacing) + line_start
 
             bar.location = (loc[0], loc[1], loc[2])
 
@@ -187,10 +194,6 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
             active = bpy.context.active_object
             active.animation_data.action.fcurves[1].lock = True
 
-            red = scene.bz_color[0]
-            green = scene.bz_color[1]
-            blue = scene.bz_color[2]
-            material = make_color('bz_color', [red, green, blue])
             active.active_material = material
 
             bar.select_set(False)

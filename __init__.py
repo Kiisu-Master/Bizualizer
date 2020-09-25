@@ -73,10 +73,14 @@ class RENDER_PT_ui(bpy.types.Panel):
         col_b.prop(scene, "bz_radius")
         col_b.enabled = scene.bz_use_radial
         row = layout.row()
-        row.prop(scene, "bz_color")
-        row = layout.row()
         row.prop(scene, "bz_attack_time")
         row.prop(scene, "bz_release_time")
+        row = layout.row()
+        row.prop(scene, "bz_color")
+        row = layout.row()
+        row.prop(scene, "bz_emission_strength")
+        row = layout.row()
+
 
         row = layout.separator()
 
@@ -174,6 +178,13 @@ def initprop():
         default=(1.0, 1.0, 1.0),
         min=0.0,
         max=1.0
+        )
+
+    bpy.types.Scene.bz_emission_strength = bpy.props.FloatProperty(
+        name="Glow Strength",
+        description="Strength of the emission shader",
+        default=1.0,
+        min=0
         )
 
     bpy.types.Scene.bz_use_radial = bpy.props.BoolProperty(
