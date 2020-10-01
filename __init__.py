@@ -66,22 +66,38 @@ class RENDER_PT_ui(bpy.types.Panel):
         col_b.prop(scene, "bz_spacing")
         col_b.enabled = not scene.bz_use_radial
         row = layout.row()
-        split = row.split()
-        col_a = split.column(align=True)
-        col_a.prop(scene, "bz_use_radial")
-        col_b = split.column(align=True)
-        col_b.prop(scene, "bz_radius")
-        col_b.enabled = scene.bz_use_radial
-        row = layout.row()
         row.prop(scene, "bz_attack_time")
         row.prop(scene, "bz_release_time")
+
+        row = layout.separator()
+
+        row = layout.row()
+        row.prop(scene, "bz_use_radial")
+        row = layout.row()
+        split = row.split()
+        col_a = split.column(align=True)
+        col_a.prop(scene, "bz_radius")
+        col_a.enabled = scene.bz_use_radial
+        col_b = split.column(align=True)
+        col_b.prop(scene, "bz_arc_angle")
+        col_b.enabled = scene.bz_use_radial
+        row = layout.row()
+        split = row.split()
+        col_a = split.column(align=True)
+        col_a.prop(scene, "bz_arc_center_offset")
+        col_a.enabled = scene.bz_use_radial
+        col_b = split.column(align=True)
+        col_b.prop(scene, "bz_flip_direction")
+        col_b.enabled = scene.bz_use_radial
+
+        row = layout.separator()
+
         row = layout.row()
         row.prop(scene, "bz_color")
         row = layout.row()
         row.prop(scene, "bz_emission_strength")
-        row = layout.row()
 
-
+        row = layout.separator()
         row = layout.separator()
 
         row = layout.row()
@@ -94,6 +110,8 @@ class RENDER_PT_ui(bpy.types.Panel):
         row.prop(scene, "bz_cam_alignment")
         row = layout.row()
         row.operator("object.bz_align_camera", icon="CAMERA_DATA")
+
+        row = layout.separator()
 
         box = layout.box()
         row = box.row()
@@ -198,6 +216,28 @@ def initprop():
         description="Radius of the radial visualizer",
         default=20,
         min=0
+        )
+
+    bpy.types.Scene.bz_arc_angle = bpy.props.FloatProperty(
+        name="Arc Angle",
+        description="Angular size of the radial visualizer",
+        default=360,
+        min=1,
+        max=360
+        )
+
+    bpy.types.Scene.bz_arc_center_offset = bpy.props.FloatProperty(
+        name="Arc Rotation",
+        description="Angle where radial visualizer is centered",
+        default=0,
+        min=-180,
+        max=180
+        )
+        
+    bpy.types.Scene.bz_flip_direction = bpy.props.BoolProperty(
+        name="Flip Direction",
+        description="Arrange the bars in reverse direction",
+        default=False
         )
 
     bpy.types.Scene.bz_spacing = bpy.props.FloatProperty(

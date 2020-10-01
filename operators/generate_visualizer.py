@@ -111,6 +111,9 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
         amplitude = scene.bz_amplitude / self.base_size
         spacing = scene.bz_spacing + scene.bz_bar_width
         radius = scene.bz_radius
+        arc_angle_deg = scene.bz_arc_angle
+        arc_center_deg = scene.bz_arc_center_offset
+        flip_direction = scene.bz_flip_direction
         audiofile = bpy.path.abspath(scene.bz_audiofile)
         digits = str(len(str(bar_count)))
         number_format = "%0" + digits + "d"
@@ -118,6 +121,14 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
 
         vertices = self.getVertices(bar_shape)
         faces = self.getFaces(bar_shape)
+
+        arc_direction = -1
+        if flip_direction:
+            arc_direction = 1
+        
+        arc_angle = arc_angle_deg/360 * 2 * math.pi
+        arc_center = -arc_center_deg/360 * 2 * math.pi
+        arc_start = arc_center - arc_direction * arc_angle/2
 
         red = scene.bz_color[0]
         green = scene.bz_color[1]
@@ -156,7 +167,7 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
             loc = [0.0, 0.0, 0.0]
 
             if scene.bz_use_radial:
-                angle = -2 * i * math.pi / bar_count
+                angle = arc_start + arc_direction * ((i+0.5) / bar_count) * arc_angle
                 bar.rotation_euler[2] = angle
                 loc[0] = -math.sin(angle) * radius
                 loc[1] = math.cos(angle) * radius
