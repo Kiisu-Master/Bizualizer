@@ -93,7 +93,31 @@ class RENDER_PT_ui(bpy.types.Panel):
         row = layout.separator()
 
         row = layout.row()
-        row.prop(scene, "bz_color")
+        split = row.split()
+        col_a = split.column(align=True)
+        col_a.label(text="Visualizer Color Style:")
+        col_b = split.column(align=True)
+        col_b.prop(scene, "bz_color_style")
+
+        if scene.bz_color_style != "SINGLE_COLOR":
+            row = layout.row()
+            row.prop(scene, "bz_color_count")
+
+        row = layout.row()
+        row.prop(scene, "bz_color1")
+
+        if scene.bz_color_style != "SINGLE_COLOR":
+            for index in range(2, scene.bz_color_count + 1):
+                row = layout.row()
+                row.prop(scene, "bz_color" + ("{0:d}".format(index)))
+
+            row = layout.row()
+            row.prop(scene, "bz_color_pattern")
+
+            if scene.bz_color_style == "GRADIENT":
+                row = layout.row()
+                row.prop(scene, "bz_gradient_interpolation")
+
         row = layout.row()
         row.prop(scene, "bz_emission_strength")
 
@@ -188,15 +212,129 @@ def initprop():
         min=0
         )
 
-    bpy.types.Scene.bz_color = bpy.props.FloatVectorProperty(
-        name="Bar Color",
+    color_input_description = "Color applied to bars after visualizer is generated"
+
+    bpy.types.Scene.bz_color_style = bpy.props.EnumProperty(
+        name="",
+        description="How the color(s) should be applied to bars",
+        default="SINGLE_COLOR",
+        items=[ ("SINGLE_COLOR", "Single Color", "", "", 1),
+                ("PATTERN", "Pattern", "", "", 2),
+                ("GRADIENT", "Gradient", "", "", 3)
+        ])
+
+    bpy.types.Scene.bz_color_count = bpy.props.IntProperty(
+        name="Color Count",
+        description="Number of input colors",
+        default=3,
+        min=2,
+        max=9
+        )
+
+    bpy.types.Scene.bz_color1 = bpy.props.FloatVectorProperty(
+        name="Bar Color 1",
         subtype='COLOR_GAMMA',
-        description="Color applied to bars after visualizer is generated",
+        description=color_input_description,
         size=3,
         default=(1.0, 1.0, 1.0),
         min=0.0,
         max=1.0
         )
+
+    bpy.types.Scene.bz_color2 = bpy.props.FloatVectorProperty(
+        name="Bar Color 2",
+        subtype='COLOR_GAMMA',
+        description=color_input_description,
+        size=3,
+        default=(1.0, 0.0, 0.0),
+        min=0.0,
+        max=1.0
+        )
+
+    bpy.types.Scene.bz_color3 = bpy.props.FloatVectorProperty(
+        name="Bar Color 3",
+        subtype='COLOR_GAMMA',
+        description=color_input_description,
+        size=3,
+        default=(0.0, 0.0, 1.0),
+        min=0.0,
+        max=1.0
+        )
+
+    bpy.types.Scene.bz_color4 = bpy.props.FloatVectorProperty(
+        name="Bar Color 4",
+        subtype='COLOR_GAMMA',
+        description=color_input_description,
+        size=3,
+        default=(0.0, 1.0, 0.0),
+        min=0.0,
+        max=1.0
+        )
+
+    bpy.types.Scene.bz_color5 = bpy.props.FloatVectorProperty(
+        name="Bar Color 5",
+        subtype='COLOR_GAMMA',
+        description=color_input_description,
+        size=3,
+        default=(0.0, 1.0, 1.0),
+        min=0.0,
+        max=1.0
+        )
+
+    bpy.types.Scene.bz_color6 = bpy.props.FloatVectorProperty(
+        name="Bar Color 6",
+        subtype='COLOR_GAMMA',
+        description=color_input_description,
+        size=3,
+        default=(1.0, 1.0, 0.0),
+        min=0.0,
+        max=1.0
+        )
+
+    bpy.types.Scene.bz_color7 = bpy.props.FloatVectorProperty(
+        name="Bar Color 7",
+        subtype='COLOR_GAMMA',
+        description=color_input_description,
+        size=3,
+        default=(1.0, 0.0, 1.0),
+        min=0.0,
+        max=1.0
+        )
+
+    bpy.types.Scene.bz_color8 = bpy.props.FloatVectorProperty(
+        name="Bar Color 8",
+        subtype='COLOR_GAMMA',
+        description=color_input_description,
+        size=3,
+        default=(0.5, 0.5, 0.5),
+        min=0.0,
+        max=1.0
+        )
+
+    bpy.types.Scene.bz_color9 = bpy.props.FloatVectorProperty(
+        name="Bar Color 9",
+        subtype='COLOR_GAMMA',
+        description=color_input_description,
+        size=3,
+        default=(0.0, 0.0, 0.0),
+        min=0.0,
+        max=1.0
+        )
+
+    bpy.types.Scene.bz_color_pattern = bpy.props.StringProperty(
+        name="Color Pattern",
+        description="Pattern in which the colors will be applied to bars",
+        default="12321"
+        )
+
+    bpy.types.Scene.bz_gradient_interpolation = bpy.props.EnumProperty(
+        name="Interpolation",
+        description="Color system used for computing the gradient",
+        default="RGB",
+        items=[ ("RGB", "RGB", "", "", 1),
+                ("HSV", "HSV", "", "", 2),
+                ("HSL", "HSL", "", "", 3)
+        ])
 
     bpy.types.Scene.bz_emission_strength = bpy.props.FloatProperty(
         name="Glow Strength",
