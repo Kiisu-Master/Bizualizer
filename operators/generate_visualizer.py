@@ -124,10 +124,13 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
         arc_angle_deg = scene.bz_arc_angle
         arc_center_deg = scene.bz_arc_center_offset
         flip_direction = scene.bz_flip_direction
+        preview_mode = scene.bz_preview_mode
         audiofile = bpy.path.abspath(scene.bz_audiofile)
+
         digits = str(len(str(bar_count)))
         number_format = "%0" + digits + "d"
         line_start = -(bar_count * spacing) / 2 + spacing / 2
+        preview_coef = 8 * math.pi / bar_count
 
         vertices = self.getVertices(bar_shape)
         faces = self.getFaces(bar_shape)
@@ -204,26 +207,29 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
             c = bpy.context.copy()
             get_context_area(bpy.context, c)
 
-            bpy.ops.object.transform_apply(
-                location=False, rotation=False, scale=True)
+            if preview_mode:
+                bar.scale.y = amplitude * (math.cos(i * preview_coef) + 1.2) / 2.2
+            else:
+                bpy.ops.object.transform_apply(
+                    location=False, rotation=False, scale=True)
 
-            bpy.ops.anim.keyframe_insert_menu(c, type="Scaling")
-            bar.animation_data.action.fcurves[0].lock = True
-            bar.animation_data.action.fcurves[2].lock = True
+                bpy.ops.anim.keyframe_insert_menu(c, type="Scaling")
+                bar.animation_data.action.fcurves[0].lock = True
+                bar.animation_data.action.fcurves[2].lock = True
 
-            l = h
-            h = l*(a**noteStep)
-            
-            area = bpy.context.area.type
-            bpy.context.area.type = 'GRAPH_EDITOR'
+                l = h
+                h = l*(a**noteStep)
+                
+                area = bpy.context.area.type
+                bpy.context.area.type = 'GRAPH_EDITOR'
 
-            bpy.ops.graph.sound_bake(filepath=audiofile, low=(l), high=(h), 
-                                        attack=attack_time, release=release_time)
-            
-            bpy.context.area.type = area
-            
-            active = bpy.context.active_object
-            active.animation_data.action.fcurves[1].lock = True
+                bpy.ops.graph.sound_bake(filepath=audiofile, low=(l), high=(h), 
+                                            attack=attack_time, release=release_time)
+                    
+                bpy.context.area.type = area
+
+                active = bpy.context.active_object
+                active.animation_data.action.fcurves[1].lock = True
 
             if color_style == "PATTERN":
                 color_index = color_pattern[i % color_pattern_length]
@@ -235,7 +241,7 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
                 color = self.compute_gradient_color(progress, color_pattern_length, color_pattern, color_dict, gradient_interpolation)
                 material = make_color('bz_color' + formatted_number, color, emission_strength)
 
-            active.active_material = material
+            bar.active_material = material
 
             bar.select_set(False)
             progress = 100 * (i/bar_count)

@@ -91,6 +91,7 @@ class RENDER_PT_ui(bpy.types.Panel):
         col_b.enabled = scene.bz_use_radial
 
         row = layout.separator()
+        row = layout.label(text="Colors")
 
         row = layout.row()
         split = row.split()
@@ -122,8 +123,10 @@ class RENDER_PT_ui(bpy.types.Panel):
         row.prop(scene, "bz_emission_strength")
 
         row = layout.separator()
-        row = layout.separator()
+        row = layout.label(text="Generate")
 
+        row = layout.row()
+        row.prop(scene, "bz_preview_mode")
         row = layout.row()
         row.operator("object.bz_generate", icon="FILE_REFRESH")
 
@@ -383,6 +386,12 @@ def initprop():
         description="Spacing between bars",
         default=0.65,
         min=0
+        )
+
+    bpy.types.Scene.bz_preview_mode = bpy.props.BoolProperty(
+        name="Preview Mode",
+        description="Generate bars without animation",
+        default=False
         )
 
     bpy.types.Scene.bz_cam_alignment = bpy.props.EnumProperty(
