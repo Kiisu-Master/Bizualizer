@@ -48,6 +48,8 @@ class RENDER_PT_ui(bpy.types.Panel):
         row = layout.label(text="Bars")
 
         row = layout.row()
+        row.prop(scene, "bz_custom_name")
+        row = layout.row()
         row.prop(scene, "bz_bar_shape")
         row = layout.row()
         row.prop(scene, "bz_bar_count")
@@ -175,6 +177,12 @@ def initprop():
         default=0.2,
         min=0,
         max=5
+        )
+    
+    bpy.types.Scene.bz_custom_name = bpy.props.StringProperty(
+        name="Visualizer name",
+        description="Define the name",
+        subtype="NONE",
         )
 
     bpy.types.Scene.bz_bar_shape = bpy.props.EnumProperty(

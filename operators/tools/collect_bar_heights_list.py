@@ -15,7 +15,7 @@ def collect_bar_heights_list(song_path, bar_count, scene):
 
     count = 0
     while count < len(scene.objects):
-        if scene.objects[count].name.startswith("bz_bar"):
+        if scene.objects[count].name.startswith(scene.bz_custom_name):
             bz_bars.append(scene.objects[count].name)
         count += 1
 
