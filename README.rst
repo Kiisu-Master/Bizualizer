@@ -1,11 +1,14 @@
-.. image:: https://img.shields.io/badge/Donate-PayPal-green.svg
-    :target: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8A2CSLXDJU752
-
 ==========
 Bizualizer
 ==========
 
 .. contents::
+
+Information
+===========
+
+A fork of doakey3's Bizualizer repository. I am merging ponychord, damians03 and JohnyDaison's changes together.
+
 
 Tutorial Video
 ==============
