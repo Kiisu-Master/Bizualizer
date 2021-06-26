@@ -9,7 +9,7 @@ bl_info = {
     "description": "Create a simple visualizer for audio",
     "author": "doakey3",
     "version": (1, 3, 3),
-    "blender": (2, 80, 0),
+    "blender": (2, 93, 0),
     "wiki_url": "https://github.com/doakey3/Bizualizer",
     "tracker_url": "https://github.com/doakey3/Bizualizer/issues",
     "category": "Animation",
@@ -48,9 +48,19 @@ class RENDER_PT_ui(bpy.types.Panel):
         row = layout.label(text="Bars")
 
         row = layout.row()
-        row.prop(scene, "bz_custom_name")
+        split = row.split()
+        col_a = split.column(align=True)
+        col_a.label(text="Bar Name:")
+        col_b = split.column(align=True)
+        col_b.prop(scene, "bz_custom_name")
+
         row = layout.row()
-        row.prop(scene, "bz_bar_shape")
+        split = row.split()
+        col_a = split.column(align=True)
+        col_a.label(text="Bar Shape:")
+        col_b = split.column(align=True)
+        col_b.prop(scene, "bz_bar_shape")
+
         row = layout.row()
         row.prop(scene, "bz_bar_count")
         row = layout.row()
@@ -75,6 +85,7 @@ class RENDER_PT_ui(bpy.types.Panel):
 
         row = layout.row()
         row.prop(scene, "bz_use_radial")
+
         row = layout.row()
         split = row.split()
         col_a = split.column(align=True)
@@ -90,14 +101,8 @@ class RENDER_PT_ui(bpy.types.Panel):
         col_a.prop(scene, "bz_arc_angle")
         col_a.enabled = scene.bz_use_radial
         col_b = split.column(align=True)
-        col_b.prop(scene, "bz_use_sym")
+        col_b.prop(scene, "bz_arc_center_offset")
         col_b.enabled = scene.bz_use_radial
-
-        row = layout.row()
-        split = row.split()
-        col_a = split.column(align=True)
-        col_a.prop(scene, "bz_arc_center_offset")
-        col_a.enabled = scene.bz_use_radial
 
         row = layout.separator()
         row = layout.label(text="Colors")
@@ -135,7 +140,12 @@ class RENDER_PT_ui(bpy.types.Panel):
         row = layout.label(text="Generate")
 
         row = layout.row()
-        row.prop(scene, "bz_preview_mode")
+        split = row.split()
+        col_a = split.column(align=True)
+        col_a.prop(scene, "bz_preview_mode")
+        col_b = split.column(align=True)
+        col_b.prop(scene, "bz_use_sym")
+
         row = layout.row()
         row.operator("object.bz_generate", icon="FILE_REFRESH")
 
@@ -158,6 +168,7 @@ class RENDER_PT_ui(bpy.types.Panel):
 
 
 def initprop():
+
     bpy.types.Scene.bz_audiofile = bpy.props.StringProperty(
         name="Audio Path",
         description="Define path of the audio file",
@@ -188,14 +199,14 @@ def initprop():
     )
 
     bpy.types.Scene.bz_custom_name = bpy.props.StringProperty(
-        name="Bar Name",
+        name="",
         description="Define the name",
         default="bz_bar",
         subtype="NONE"
     )
 
     bpy.types.Scene.bz_bar_shape = bpy.props.EnumProperty(
-        name="Bar Shape",
+        name="",
         description="The shape of the bars",
         default="RECTANGLE",
         items=[("RECTANGLE", "Rectangle", "", "", 1),
@@ -446,7 +457,6 @@ classes = [
     RENDER_OT_make_previews,
     RENDER_OT_remove_bz_audio
 ]
-
 
 def register():
     initprop()
