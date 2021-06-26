@@ -73,6 +73,7 @@ class RENDER_PT_ui(bpy.types.Panel):
 
         row = layout.separator()
 
+
         row = layout.row()
         row.prop(scene, "bz_use_radial")
         row = layout.row()
@@ -81,16 +82,24 @@ class RENDER_PT_ui(bpy.types.Panel):
         col_a.prop(scene, "bz_radius")
         col_a.enabled = scene.bz_use_radial
         col_b = split.column(align=True)
-        col_b.prop(scene, "bz_arc_angle")
+        col_b.prop(scene, "bz_flip_direction")
         col_b.enabled = scene.bz_use_radial
+
+        row = layout.row()
+        split = row.split()
+        col_a = split.column(align=True)
+        col_a.prop(scene, "bz_arc_angle")
+        col_a.enabled = scene.bz_use_radial
+        col_b = split.column(align=True)
+        col_b.prop(scene, "bz_use_sym")
+        col_b.enabled = scene.bz_use_radial
+
         row = layout.row()
         split = row.split()
         col_a = split.column(align=True)
         col_a.prop(scene, "bz_arc_center_offset")
         col_a.enabled = scene.bz_use_radial
-        col_b = split.column(align=True)
-        col_b.prop(scene, "bz_flip_direction")
-        col_b.enabled = scene.bz_use_radial
+
 
         row = layout.separator()
         row = layout.label(text="Colors")
@@ -386,6 +395,12 @@ def initprop():
     bpy.types.Scene.bz_flip_direction = bpy.props.BoolProperty(
         name="Flip Direction",
         description="Arrange the bars in reverse direction",
+        default=False
+        )
+
+    bpy.types.Scene.bz_use_sym = bpy.props.BoolProperty(
+        name="Use Symmetry",
+        description="Visualizer is reflected over Y axis",
         default=False
         )
 
