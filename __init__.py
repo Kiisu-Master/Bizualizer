@@ -22,8 +22,8 @@ class RENDER_PT_ui(bpy.types.Panel):
     bl_label = "Bizualizer"
     bl_context = "scene"
     bl_options = {"DEFAULT_CLOSED"}
-    
-    def is_shape_3d(self, shape):    
+
+    def is_shape_3d(self, shape):
         if shape == "CUBOID" or shape == "PYRAMID":
             return True
         else:
@@ -73,7 +73,6 @@ class RENDER_PT_ui(bpy.types.Panel):
 
         row = layout.separator()
 
-
         row = layout.row()
         row.prop(scene, "bz_use_radial")
         row = layout.row()
@@ -99,7 +98,6 @@ class RENDER_PT_ui(bpy.types.Panel):
         col_a = split.column(align=True)
         col_a.prop(scene, "bz_arc_center_offset")
         col_a.enabled = scene.bz_use_radial
-
 
         row = layout.separator()
         row = layout.label(text="Colors")
@@ -158,19 +156,20 @@ class RENDER_PT_ui(bpy.types.Panel):
         row.operator('object.batch_bizualize', icon="ALIGN_LEFT")
         row.operator('object.make_bz_previews')
 
+
 def initprop():
     bpy.types.Scene.bz_audiofile = bpy.props.StringProperty(
         name="Audio Path",
         description="Define path of the audio file",
         subtype="FILE_PATH",
-        )
+    )
 
     bpy.types.Scene.bz_audio_channel = bpy.props.IntProperty(
         name="Audio Channel",
         description="Channel where audio will be added",
         default=1,
         min=1
-        )
+    )
 
     bpy.types.Scene.bz_attack_time = bpy.props.FloatProperty(
         name="Attack Time",
@@ -178,7 +177,7 @@ def initprop():
         default=0.005,
         min=0,
         max=2
-        )
+    )
 
     bpy.types.Scene.bz_release_time = bpy.props.FloatProperty(
         name="Release Time",
@@ -186,51 +185,100 @@ def initprop():
         default=0.2,
         min=0,
         max=5
-        )
-    
+    )
+
     bpy.types.Scene.bz_custom_name = bpy.props.StringProperty(
-        name="Visualizer name",
+        name="Bar Name",
         description="Define the name",
-        subtype="NONE",
-        )
+        default="bz_bar",
+        subtype="NONE"
+    )
 
     bpy.types.Scene.bz_bar_shape = bpy.props.EnumProperty(
         name="Bar Shape",
         description="The shape of the bars",
         default="RECTANGLE",
-        items=[ ("RECTANGLE", "Rectangle", "", "", 1),
-                ("TRIANGLE", "Triangle", "", "", 2),
-                ("CUBOID", "Cuboid", "", "", 3),
-                ("PYRAMID", "Pyramid", "", "", 4)
-        ])
-    
+        items=[("RECTANGLE", "Rectangle", "", "", 1),
+               ("TRIANGLE", "Triangle", "", "", 2),
+               ("CUBOID", "Cuboid", "", "", 3),
+               ("PYRAMID", "Pyramid", "", "", 4)
+               ])
+
     bpy.types.Scene.bz_bar_count = bpy.props.IntProperty(
         name="Bar Count",
         description="The number of bars to make",
         default=64,
         min=1
-        )
+    )
 
     bpy.types.Scene.bz_bar_width = bpy.props.FloatProperty(
         name="Bar Width",
         description="The width of the bars",
         default=1.6,
         min=0
-        )
+    )
 
     bpy.types.Scene.bz_bar_depth = bpy.props.FloatProperty(
         name="Bar Depth",
         description="The depth of the bars (3D only)",
         default=1.6,
         min=0
-        )
+    )
 
     bpy.types.Scene.bz_amplitude = bpy.props.FloatProperty(
         name="Amplitude",
         description="Amplitude of visualizer bars",
         default=48.0,
         min=0
-        )
+    )
+
+    bpy.types.Scene.bz_spacing = bpy.props.FloatProperty(
+        name="Spacing",
+        description="Spacing between bars",
+        default=0.65,
+        min=0
+    )
+
+    bpy.types.Scene.bz_use_radial = bpy.props.BoolProperty(
+        name="Use Radial",
+        description="Use a circular visualizer",
+        default=False
+    )
+
+    bpy.types.Scene.bz_radius = bpy.props.FloatProperty(
+        name="Radius",
+        description="Radius of the radial visualizer",
+        default=20,
+        min=0
+    )
+
+    bpy.types.Scene.bz_arc_angle = bpy.props.FloatProperty(
+        name="Arc Angle",
+        description="Angular size of the radial visualizer",
+        default=360,
+        min=1,
+        max=360
+    )
+
+    bpy.types.Scene.bz_arc_center_offset = bpy.props.FloatProperty(
+        name="Arc Rotation",
+        description="Angle where radial visualizer is centered",
+        default=0,
+        min=-180,
+        max=180
+    )
+
+    bpy.types.Scene.bz_flip_direction = bpy.props.BoolProperty(
+        name="Flip Direction",
+        description="Arrange the bars in reverse direction",
+        default=False
+    )
+
+    bpy.types.Scene.bz_use_sym = bpy.props.BoolProperty(
+        name="Use Symmetry",
+        description="Visualizer is reflected over Y axis",
+        default=False
+    )
 
     color_input_description = "Color applied to bars after visualizer is generated"
 
@@ -238,10 +286,10 @@ def initprop():
         name="",
         description="How the color(s) should be applied to bars",
         default="SINGLE_COLOR",
-        items=[ ("SINGLE_COLOR", "Single Color", "", "", 1),
-                ("PATTERN", "Pattern", "", "", 2),
-                ("GRADIENT", "Gradient", "", "", 3)
-        ])
+        items=[("SINGLE_COLOR", "Single Color", "", "", 1),
+               ("PATTERN", "Pattern", "", "", 2),
+               ("GRADIENT", "Gradient", "", "", 3)
+               ])
 
     bpy.types.Scene.bz_color_count = bpy.props.IntProperty(
         name="Color Count",
@@ -249,7 +297,7 @@ def initprop():
         default=3,
         min=2,
         max=9
-        )
+    )
 
     bpy.types.Scene.bz_color1 = bpy.props.FloatVectorProperty(
         name="Bar Color 1",
@@ -259,7 +307,7 @@ def initprop():
         default=(1.0, 1.0, 1.0),
         min=0.0,
         max=1.0
-        )
+    )
 
     bpy.types.Scene.bz_color2 = bpy.props.FloatVectorProperty(
         name="Bar Color 2",
@@ -269,7 +317,7 @@ def initprop():
         default=(1.0, 0.0, 0.0),
         min=0.0,
         max=1.0
-        )
+    )
 
     bpy.types.Scene.bz_color3 = bpy.props.FloatVectorProperty(
         name="Bar Color 3",
@@ -279,7 +327,7 @@ def initprop():
         default=(0.0, 0.0, 1.0),
         min=0.0,
         max=1.0
-        )
+    )
 
     bpy.types.Scene.bz_color4 = bpy.props.FloatVectorProperty(
         name="Bar Color 4",
@@ -289,7 +337,7 @@ def initprop():
         default=(0.0, 1.0, 0.0),
         min=0.0,
         max=1.0
-        )
+    )
 
     bpy.types.Scene.bz_color5 = bpy.props.FloatVectorProperty(
         name="Bar Color 5",
@@ -299,7 +347,7 @@ def initprop():
         default=(0.0, 1.0, 1.0),
         min=0.0,
         max=1.0
-        )
+    )
 
     bpy.types.Scene.bz_color6 = bpy.props.FloatVectorProperty(
         name="Bar Color 6",
@@ -309,7 +357,7 @@ def initprop():
         default=(1.0, 1.0, 0.0),
         min=0.0,
         max=1.0
-        )
+    )
 
     bpy.types.Scene.bz_color7 = bpy.props.FloatVectorProperty(
         name="Bar Color 7",
@@ -319,7 +367,7 @@ def initprop():
         default=(1.0, 0.0, 1.0),
         min=0.0,
         max=1.0
-        )
+    )
 
     bpy.types.Scene.bz_color8 = bpy.props.FloatVectorProperty(
         name="Bar Color 8",
@@ -329,7 +377,7 @@ def initprop():
         default=(0.5, 0.5, 0.5),
         min=0.0,
         max=1.0
-        )
+    )
 
     bpy.types.Scene.bz_color9 = bpy.props.FloatVectorProperty(
         name="Bar Color 9",
@@ -339,102 +387,55 @@ def initprop():
         default=(0.0, 0.0, 0.0),
         min=0.0,
         max=1.0
-        )
+    )
 
     bpy.types.Scene.bz_color_pattern = bpy.props.StringProperty(
         name="Color Pattern",
         description="Pattern in which the colors will be applied to bars",
         default="12321"
-        )
+    )
 
     bpy.types.Scene.bz_gradient_interpolation = bpy.props.EnumProperty(
         name="Interpolation",
         description="Color system used for computing the gradient",
         default="RGB",
-        items=[ ("RGB", "RGB", "", "", 1),
-                ("HSV", "HSV", "", "", 2),
-                ("HSL", "HSL", "", "", 3)
-        ])
+        items=[("RGB", "RGB", "", "", 1),
+               ("HSV", "HSV", "", "", 2),
+               ("HSL", "HSL", "", "", 3)
+               ])
 
     bpy.types.Scene.bz_emission_strength = bpy.props.FloatProperty(
         name="Glow Strength",
         description="Strength of the emission shader",
         default=1.0,
         min=0
-        )
-
-    bpy.types.Scene.bz_use_radial = bpy.props.BoolProperty(
-        name="Use Radial",
-        description="Use a circular visualizer",
-        default=False
-        )
-
-    bpy.types.Scene.bz_radius = bpy.props.FloatProperty(
-        name="Radius",
-        description="Radius of the radial visualizer",
-        default=20,
-        min=0
-        )
-
-    bpy.types.Scene.bz_arc_angle = bpy.props.FloatProperty(
-        name="Arc Angle",
-        description="Angular size of the radial visualizer",
-        default=360,
-        min=1,
-        max=360
-        )
-
-    bpy.types.Scene.bz_arc_center_offset = bpy.props.FloatProperty(
-        name="Arc Rotation",
-        description="Angle where radial visualizer is centered",
-        default=0,
-        min=-180,
-        max=180
-        )
-        
-    bpy.types.Scene.bz_flip_direction = bpy.props.BoolProperty(
-        name="Flip Direction",
-        description="Arrange the bars in reverse direction",
-        default=False
-        )
-
-    bpy.types.Scene.bz_use_sym = bpy.props.BoolProperty(
-        name="Use Symmetry",
-        description="Visualizer is reflected over Y axis",
-        default=False
-        )
-
-    bpy.types.Scene.bz_spacing = bpy.props.FloatProperty(
-        name="Spacing",
-        description="Spacing between bars",
-        default=0.65,
-        min=0
-        )
+    )
 
     bpy.types.Scene.bz_preview_mode = bpy.props.BoolProperty(
         name="Preview Mode",
         description="Generate bars without animation",
         default=False
-        )
+    )
 
     bpy.types.Scene.bz_cam_alignment = bpy.props.EnumProperty(
         name="Alignment",
         description="Position, orientation and type of camera",
         default="2D_bottom",
-        items=[ ("2D_bottom", "2D bottom", "", "", 1),
-                ("2D_center", "2D center", "", "", 2),
-                ("2D_top", "2D top", "", "", 3),
-                ("2D_left", "2D left", "", "", 4),
-                ("2D_right", "2D right", "", "", 5),
-                ("3D_bottom", "3D bottom", "", "", 6),
-                ("3D_center", "3D center", "", "", 7)
-        ])        
+        items=[("2D_bottom", "2D bottom", "", "", 1),
+               ("2D_center", "2D center", "", "", 2),
+               ("2D_top", "2D top", "", "", 3),
+               ("2D_left", "2D left", "", "", 4),
+               ("2D_right", "2D right", "", "", 5),
+               ("3D_bottom", "3D bottom", "", "", 6),
+               ("3D_center", "3D center", "", "", 7)
+               ])
 
     bpy.types.Scene.bbz_config = bpy.props.StringProperty(
         name="Config File",
         description="Path to the Config File",
         subtype="FILE_PATH",
-        )
+    )
+
 
 classes = [
     RENDER_PT_ui,
@@ -446,12 +447,14 @@ classes = [
     RENDER_OT_remove_bz_audio
 ]
 
+
 def register():
     initprop()
 
     from bpy.utils import register_class
     for cls in classes:
         register_class(cls)
+
 
 def unregister():
     from bpy.utils import unregister_class
