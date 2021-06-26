@@ -7,7 +7,32 @@ Bizualizer
 Information
 ===========
 
-A fork of doakey3's Bizualizer repository. I am merging ponychord, damians03 and JohnyDaison's changes together.
+A fork of doakey3's Bizualizer repository. I merged ponychord, damians03 and JohnyDaison's changes together, and added new features:
+
+Now able to use symmetry both in radial and straight forms.
+
+Attack and release time configurable.
+
+Option of 2 2D and 3D shapes for bars.
+
+Camera alignment options.
+
+Improved UI.
+
+Radial options: arc angle, arc rotation, flip direction.
+
+New colour options: single colour, pattern, gradient, adjustable emission glow strength.
+
+Preview mode.
+
+New bars are placed in their own collection to avoid cluttering.
+
+Each bar set now has a custom name. Multiple bar sets can be made by changing the name.
+
+Each bar is a child of an empty, which can be moved, rotated and scaled. When regenerating a bar set the bars go back to the empty.
+
+
+
 
 
 Tutorial Video
