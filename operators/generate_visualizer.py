@@ -191,7 +191,8 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
 
         for i in range(0, bar_count):
             formatted_number = number_format % i
-            name = 'Bar ' + formatted_number
+            name = str(round(low, 1)) + ' | ' + str(round(high, 1))
+            # name = 'Bar ' + formatted_number
 
             mesh = bpy.data.meshes.new(name)
             bar = bpy.data.objects.new(name, mesh)
