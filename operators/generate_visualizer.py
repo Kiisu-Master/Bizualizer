@@ -234,7 +234,7 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
                 bpy.ops.object.transform_apply(
                     location=False, rotation=False, scale=True)
 
-                bpy.ops.anim.keyframe_insert_menu(c, type="Scaling")
+                bpy.ops.anim.keyframe_insert_menu(type="Scaling")
                 bar.animation_data.action.fcurves[0].lock = True
                 bar.animation_data.action.fcurves[2].lock = True
 
