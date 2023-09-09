@@ -244,7 +244,7 @@ class RENDER_OT_generate_visualizer(bpy.types.Operator):
                 area = bpy.context.area.type
                 bpy.context.area.type = 'GRAPH_EDITOR'
 
-                bpy.ops.graph.sound_bake(filepath=audiofile, low=low, high=high,
+                bpy.ops.graph.sound_to_samples(filepath=audiofile, low=low, high=high,
                                          attack=attack_time, release=release_time)
 
                 bpy.context.area.type = area
